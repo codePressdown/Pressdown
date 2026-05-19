@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pressdown — press your newsletter into its final form</title>
+<meta name="description" content="Write your newsletter in Markdown, see a pixel-accurate email preview, copy bulletproof HTML into any platform. No account — your newsletter content stays in your browser.">
+
+<!-- SEO / social -->
+<link rel="canonical" href="https://pressdown.artivicolab.com/app.html">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#efe9dc">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+<link rel="manifest" href="manifest.json">
+<meta name="msapplication-TileColor" content="#3C6E9F">
+<meta name="msapplication-TileImage" content="ms-icon-144x144.png">
+<meta name="msapplication-config" content="browserconfig.xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pressdown">
+<meta property="og:title" content="Pressdown — the newsletter workspace">
+<meta property="og:description" content="Write Markdown, see a pixel-accurate email preview, copy bulletproof HTML into any platform. No account — your writing stays in your browser.">
+<meta property="og:url" content="https://pressdown.artivicolab.com/app.html">
+<meta property="og:image" content="https://pressdown.artivicolab.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pressdown — press your newsletter into its final form">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pressdown — the newsletter workspace">
+<meta name="twitter:description" content="Write Markdown, see a pixel-accurate email preview, copy bulletproof HTML. No account — your writing stays in your browser.">
+<meta name="twitter:image" content="https://pressdown.artivicolab.com/og.png">
+
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Pre-paint theme (light/dark app chrome) to avoid a flash.
+  try {
+    var d = localStorage.getItem('pressdown_chrome');
+    if (d) document.documentElement.setAttribute('data-chrome', d);
+  } catch (e) {}
+</script>
+<script src="js/analytics.js"></script>
+</head>
+<body>
+
+<noscript>
+  <div style="max-width:520px;margin:18vh auto;padding:0 24px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+    <div style="color:#3C6E9F;font-size:30px">▼</div>
+    <h1 style="font-size:22px;letter-spacing:-.02em;margin:14px 0 8px">Pressdown needs JavaScript</h1>
+    <p style="color:#6b7280;line-height:1.6;margin:0">The workspace runs entirely
+    in your browser — the editor, the email compiler and local storage are all
+    JavaScript. Enable it for this page to start writing. Nothing is sent to a
+    server either way.</p>
+  </div>
+  <style>.topbar,.workspace,.statusbar,.panel-wrap,#toast{display:none!important}</style>
+</noscript>
+
+<header class="topbar">
+  <a class="logo" href="index.html" aria-label="Pressdown home">
+    <img class="logo-img" src="favicon-96x96.png" alt="" width="22" height="22"> Pressdown
+  </a>
+
+  <div class="issue-id">
+    <input id="issueName" class="issue-name" type="text" placeholder="Name this issue…" autocomplete="off" spellcheck="false">
+    <span id="issueNo" class="issue-no"></span>
+  </div>
+
+  <div class="topbar-controls">
+    <label class="sel">
+      <span>Platform</span>
+      <select id="platformSel"></select>
+    </label>
+    <span class="topbar-sep" aria-hidden="true"></span>
+    <label class="sel">
+      <span>Brand</span>
+      <select id="brandSel"></select>
+    </label>
+    <label class="sel">
+      <span>Template</span>
+      <select id="tplSel"></select>
+    </label>
+
+    <div class="seg" role="group" aria-label="Preview width">
+      <button id="devDesktop" class="seg-btn on" type="button" title="Desktop preview">Desktop</button>
+      <button id="devMobile" class="seg-btn" type="button" title="375px mobile preview">Mobile</button>
+    </div>
+    <button id="darkBtn" class="btn btn-ghost" type="button" title="Simulate dark-mode rendering">Dark</button>
+
+    <div class="seg" role="group" aria-label="App theme">
+      <button id="themeBrand" class="seg-btn on" type="button" title="Brand color theme">Brand</button>
+      <button id="themeBw" class="seg-btn" type="button" title="Black &amp; white theme">B&amp;W</button>
+    </div>
+
+    <button id="copyHtml" class="btn btn-primary" type="button">Copy HTML</button>
+    <span id="collabStatus" class="collab-status" hidden></span>
+
+    <div class="menu">
+      <button id="menuBtn" class="btn btn-ghost" type="button" aria-haspopup="true">More ▾</button>
+      <div id="menuPop" class="menu-pop" hidden>
+        <button data-act="brands" type="button">Brand presets…</button>
+        <button data-act="blocks" type="button">Reusable blocks…</button>
+        <button data-act="archive" type="button">Issue archive…</button>
+        <hr>
+        <button data-act="collab" type="button" title="Share a live editing session — no server, no account">Invite an editor…</button>
+        <button data-act="new" type="button">New issue</button>
+        <button data-act="copytext" type="button">Copy plain text</button>
+        <button data-act="copymd" type="button">Copy Markdown</button>
+        <button data-act="export" type="button">Export issue (.md)</button>
+        <hr>
+        <a data-act="privacy" href="privacy.html">Privacy &amp; your data</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="platformNote" class="platform-note" hidden></div>
+<div id="collabBanner" class="collab-banner" hidden>
+  <span id="collabBannerMsg">You've been invited to a live session.</span>
+  <button id="collabJoin" class="btn btn-ghost" type="button">Join session</button>
+  <button id="collabDismiss" class="icon-btn" type="button" aria-label="Dismiss">✕</button>
+</div>
+
+<main class="workspace" id="workspace">
+  <section class="pane editor-pane">
+    <div class="subject-row">
+      <span class="subject-lbl">Subject</span>
+      <input id="subjectLine" class="subject-inp" type="text" placeholder="Your email subject line…" autocomplete="off" spellcheck="true">
+      <span id="subjectCount" class="subject-count" aria-live="polite"></span>
+    </div>
+    <div class="toolbar" id="toolbar">
+      <button data-md="h1" type="button" title="Heading 1">H1</button>
+      <button data-md="h2" type="button" title="Heading 2">H2</button>
+      <button data-md="bold" type="button" title="Bold"><b>B</b></button>
+      <button data-md="italic" type="button" title="Italic"><i>I</i></button>
+      <button data-md="link" type="button" title="Link">Link</button>
+      <button data-md="image" type="button" title="Image">Image</button>
+      <button data-md="hr" type="button" title="Divider">— —</button>
+      <span class="tb-hint"><span id="blockHint"></span> · <button id="fnrBtn" class="tb-fnr-btn" type="button"><kbd>Ctrl+H</kbd> Find &amp; replace</button></span>
+    </div>
+    <div id="fnr" class="fnr" hidden>
+      <div class="fnr-row">
+        <input id="fnrFind" class="fnr-input" placeholder="Find…" autocomplete="off" spellcheck="false">
+        <button id="fnrPrev" class="btn btn-ghost fnr-nav" type="button" title="Previous (Shift+Enter)">↑</button>
+        <button id="fnrNext" class="btn btn-ghost fnr-nav" type="button" title="Next (Enter)">↓</button>
+        <span id="fnrCount" class="fnr-count"></span>
+        <button id="fnrClose" class="icon-btn" type="button" aria-label="Close find &amp; replace">✕</button>
+      </div>
+      <div class="fnr-row">
+        <input id="fnrReplace" class="fnr-input" placeholder="Replace with…" autocomplete="off" spellcheck="false">
+        <button id="fnrRepl" class="btn btn-ghost" type="button">Replace</button>
+        <button id="fnrReplAll" class="btn btn-ghost" type="button">Replace all</button>
+      </div>
+    </div>
+    <div class="ed-label"><span class="dot"></span> Markdown source</div>
+    <textarea id="md" class="md" spellcheck="true" autocomplete="off"
+      placeholder="# Your headline&#10;&#10;Start writing in Markdown. The email preview on the right updates as you type.&#10;&#10;Type / for your saved blocks."></textarea>
+    <div id="slashMenu" class="slash-menu" hidden></div>
+    <input type="file" id="imgPicker" accept="image/*" style="display:none" aria-hidden="true">
+  </section>
+
+  <div class="splitter" id="splitter" title="Drag to resize"></div>
+
+  <section class="pane preview-pane" id="previewPane">
+    <div class="pv-label">
+      <span class="eye">◉</span> Email preview
+      <span id="clipWarn" class="clip-warn" hidden>⚠ Over 102KB — Gmail will clip this</span>
+    </div>
+    <div class="pv-stage" id="pvStage">
+      <iframe id="preview" title="Email preview" sandbox="allow-same-origin"></iframe>
+    </div>
+  </section>
+</main>
+
+<footer class="statusbar">
+  <span id="stWords">0 words</span>
+  <span id="stRead">0 min read</span>
+  <span id="stFlesch">Flesch —</span>
+  <span id="stSentence">— wds/sentence</span>
+  <button id="cheatBtn" class="st-cheat" type="button">Markdown guide</button>
+  <span class="st-spacer"></span>
+  <span id="stSaved" class="st-saved">Local-only · your content stays in this browser</span>
+</footer>
+
+<!-- Slide-over panel (brands / blocks / archive) -->
+<div id="panelWrap" class="panel-wrap" hidden>
+  <div class="panel-scrim" id="panelScrim"></div>
+  <aside class="panel" id="panel" role="dialog" aria-modal="true">
+    <header class="panel-head">
+      <h2 id="panelTitle">Panel</h2>
+      <button id="panelClose" class="icon-btn" type="button" aria-label="Close">✕</button>
+    </header>
+    <div class="panel-body" id="panelBody"></div>
+  </aside>
+</div>
+
+<div id="cheatSheet" class="cheat-sheet" hidden>
+  <div class="cheat-head">
+    <span>Markdown cheatsheet</span>
+    <button id="cheatClose" class="icon-btn" type="button" aria-label="Close">✕</button>
+  </div>
+  <div class="cheat-grid">
+    <div class="cheat-row"><span class="cheat-syn"># Heading 1</span><span class="cheat-desc">Large heading</span></div>
+    <div class="cheat-row"><span class="cheat-syn">## Heading 2</span><span class="cheat-desc">Section heading</span></div>
+    <div class="cheat-row"><span class="cheat-syn">### Heading 3</span><span class="cheat-desc">Subheading</span></div>
+    <div class="cheat-row"><span class="cheat-syn">**bold**</span><span class="cheat-desc">Bold text</span></div>
+    <div class="cheat-row"><span class="cheat-syn">_italic_</span><span class="cheat-desc">Italic text</span></div>
+    <div class="cheat-row"><span class="cheat-syn">**_bold italic_**</span><span class="cheat-desc">Bold and italic</span></div>
+    <div class="cheat-row"><span class="cheat-syn">~~strikethrough~~</span><span class="cheat-desc">Strikethrough</span></div>
+    <div class="cheat-row"><span class="cheat-syn">[text](url)</span><span class="cheat-desc">Hyperlink</span></div>
+    <div class="cheat-row"><span class="cheat-syn">![alt](url)</span><span class="cheat-desc">Image (host it first)</span></div>
+    <div class="cheat-row"><span class="cheat-syn">&gt; text</span><span class="cheat-desc">Blockquote</span></div>
+    <div class="cheat-row"><span class="cheat-syn">- item</span><span class="cheat-desc">Bullet list</span></div>
+    <div class="cheat-row"><span class="cheat-syn">1. item</span><span class="cheat-desc">Numbered list</span></div>
+    <div class="cheat-row"><span class="cheat-syn">&nbsp;&nbsp;- nested</span><span class="cheat-desc">Nested list (2 spaces)</span></div>
+    <div class="cheat-row"><span class="cheat-syn">---</span><span class="cheat-desc">Horizontal divider</span></div>
+    <div class="cheat-row"><span class="cheat-syn">`code`</span><span class="cheat-desc">Inline monospace</span></div>
+    <div class="cheat-row"><span class="cheat-syn">```code```</span><span class="cheat-desc">Code block</span></div>
+    <div class="cheat-row"><span class="cheat-syn">| A | B |</span><span class="cheat-desc">Table row</span></div>
+    <div class="cheat-row"><span class="cheat-syn">|---|---|</span><span class="cheat-desc">Table separator</span></div>
+    <div class="cheat-row"><span class="cheat-syn">(blank line)</span><span class="cheat-desc">New paragraph</span></div>
+    <div class="cheat-row"><span class="cheat-syn">two spaces + ↵</span><span class="cheat-desc">Hard line break</span></div>
+    <div class="cheat-row"><span class="cheat-syn">\* \_ \[ \`</span><span class="cheat-desc">Escape special chars</span></div>
+    <div class="cheat-row"><span class="cheat-syn">&gt; [!NOTE]</span><span class="cheat-desc">Callout box (NOTE · TIP · IMPORTANT · WARNING · CAUTION)</span></div>
+    <div class="cheat-row"><span class="cheat-syn">[^1] · [^1]: text</span><span class="cheat-desc">Footnote ref · definition</span></div>
+    <div class="cheat-row"><span class="cheat-syn">&lt;sub&gt; · &lt;sup&gt;</span><span class="cheat-desc">Subscript · superscript</span></div>
+    <div class="cheat-row"><span class="cheat-syn">Type / · Ctrl+H</span><span class="cheat-desc">Blocks · find &amp; replace</span></div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<div id="confirmOverlay" class="confirm-overlay" hidden>
+  <div class="confirm-box" role="alertdialog" aria-modal="true" aria-describedby="confirmMsg">
+    <p id="confirmMsg" class="confirm-msg"></p>
+    <div class="confirm-actions">
+      <button id="confirmCancel" class="btn btn-ghost" type="button">Cancel</button>
+      <button id="confirmOk" class="btn btn-primary" type="button">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/vendor/marked.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

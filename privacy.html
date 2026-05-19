@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy &amp; your data — Pressdown</title>
+<meta name="description" content="How Pressdown handles your data: newsletter content lives only in your browser's IndexedDB and is never uploaded. Plain-English data policy and a one-click local wipe.">
+
+<!-- SEO / social -->
+<link rel="canonical" href="https://pressdown.artivicolab.com/privacy.html">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#efe9dc">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="manifest" href="manifest.json">
+<meta name="msapplication-TileColor" content="#3C6E9F">
+<meta name="msapplication-config" content="browserconfig.xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pressdown">
+<meta property="og:title" content="Privacy &amp; your data — Pressdown">
+<meta property="og:description" content="Newsletter content lives only in your browser and is never uploaded. Plain-English data policy.">
+<meta property="og:url" content="https://pressdown.artivicolab.com/privacy.html">
+<meta property="og:image" content="https://pressdown.artivicolab.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pressdown — press your newsletter into its final form">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Privacy &amp; your data — Pressdown">
+<meta name="twitter:description" content="Newsletter content lives only in your browser and is never uploaded.">
+<meta name="twitter:image" content="https://pressdown.artivicolab.com/og.png">
+
+<link rel="stylesheet" href="css/style.css">
+<script>try{var d=localStorage.getItem('pressdown_chrome');if(d)document.documentElement.setAttribute('data-chrome',d);}catch(e){}</script>
+<script src="js/analytics.js"></script>
+<style>
+  body{overflow:auto;display:block}
+  .doc{max-width:720px;margin:0 auto;padding:48px 24px 80px}
+  .doc h1{font-size:28px;letter-spacing:-.02em;margin:0 0 6px}
+  .doc .lede{color:var(--muted);font-size:15px;margin:0 0 36px}
+  .doc h2{font-size:17px;margin:34px 0 8px}
+  .doc p,.doc li{color:var(--ink);font-size:15px;line-height:1.72}
+  .doc a{color:var(--accent)}
+  .back{display:inline-block;margin-bottom:24px;color:var(--accent);text-decoration:none;font-size:13px}
+  .danger-zone{border:1px solid var(--danger);border-radius:var(--radius);padding:18px;margin-top:36px}
+  .danger-zone h2{margin-top:0;color:var(--danger)}
+</style>
+</head>
+<body>
+<div class="doc">
+  <a class="back" href="app.html">← Back to the editor</a>
+  <h1>Your writing never leaves your browser</h1>
+  <p class="lede">Pressdown has no account and no content upload. Your
+  newsletter stays on your device. The site does use Google Analytics to
+  measure anonymous usage — this page explains exactly what that means.</p>
+
+  <h2>Your newsletter content</h2>
+  <p>Every issue, brand preset and reusable block lives in your browser's
+  IndexedDB, on this device only. Your logo is stored as base64 inside that
+  same local database — it is never hosted anywhere. None of your writing,
+  drafts or brand assets are ever sent to us or anyone else. Closing the tab
+  does not lose anything; clearing your browser's site data does.</p>
+
+  <h2>What leaves your machine</h2>
+  <p>Two things, and nothing else. First, what you deliberately copy: when you
+  click <em>Copy HTML</em> or <em>Copy plain text</em>, that content goes to
+  your system clipboard so you can paste it into your email platform — we never
+  transmit it. Second, anonymous usage analytics, described next.</p>
+
+  <h2>Analytics</h2>
+  <p>The site can load Google Analytics 4, but only after you accept the
+  consent banner shown on your first visit — decline it and no analytics
+  script or cookie is ever loaded. When accepted, GA4 collects standard,
+  aggregate usage data — page views, approximate location derived from IP (the
+  IP itself is not retained by us), and device/browser type — and sets
+  analytics cookies, used only to understand how Pressdown is used so it can
+  be improved. <strong>It never has access to your newsletter content</strong>;
+  that data lives only in your browser and is never read by the analytics
+  script. To revoke a previous "Accept", clear this site's data (the button
+  below does that), or block it with a tracker blocker, your browser's privacy
+  settings, or Google's
+  <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">opt-out add-on</a>.</p>
+
+  <h2>GDPR / CCPA</h2>
+  <p>Your newsletter content is never processed off your device, so for that
+  there is no data controller to contact — you hold all of it, and the button
+  below performs a complete, irreversible local erasure. For analytics,
+  Artivicolab is the data controller and Google acts as a processor; you may
+  request access or erasure of analytics data, or opt out as described above,
+  by <a id="contact2" href="#">contacting us</a>.</p>
+
+  <div class="danger-zone">
+    <h2>Delete all local data</h2>
+    <p>This permanently removes every issue, brand and block from this
+    browser. It cannot be undone.</p>
+    <button id="wipe" class="btn" type="button" style="border-color:var(--danger);color:var(--danger)">Erase everything</button>
+  </div>
+
+  <p style="margin-top:36px">Questions? <a id="contact" href="#">Contact us</a>.</p>
+</div>
+
+<script type="module">
+  import { wipeEverything } from './js/storage.js';
+  document.getElementById('wipe').addEventListener('click', async () => {
+    if (!confirm('Permanently erase all Pressdown data on this device?')) return;
+    await wipeEverything();
+    try { localStorage.removeItem('pressdown_chrome'); localStorage.removeItem('pressdown_consent'); } catch (e) {}
+    alert('Done. Everything stored locally has been erased.');
+  });
+  // Email assembled at runtime, never rendered as text (anti-scrape).
+  var mail = 'mailto:' + ['artivicolab', 'gmail.com'].join('@');
+  document.getElementById('contact').href = mail;
+  var c2 = document.getElementById('contact2');
+  if (c2) c2.href = mail;
+</script>
+</body>
+</html>
